@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Home = () => {
+const Statistics = () => {
     return (
         <div className='container m-auto'>
-            <h1>Home Page</h1>
+            <h1>Statistics Page</h1>
         </div>
     );
 };
 
-export default Home;
+export default Statistics;
