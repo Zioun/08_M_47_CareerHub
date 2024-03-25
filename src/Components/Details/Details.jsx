@@ -1,8 +1,11 @@
 import React from "react";
 import { useLoaderData, useParams } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { saveJobApplication } from "../../Utility/localstore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  getStoreJobApplication,
+  saveJobApplication,
+} from "../../Utility/localstore";
 
 const Details = () => {
   const jobs = useLoaderData();
@@ -11,21 +14,35 @@ const Details = () => {
   const job = jobs.find((job) => job.id === int);
   console.log(job);
 
-  const {job_description, job_responsibility, educational_requirements, experiences, job_title, salary, contact_information} = job;
+  const {
+    job_description,
+    job_responsibility,
+    educational_requirements,
+    experiences,
+    job_title,
+    salary,
+    contact_information,
+  } = job;
 
   const handleApplyJob = () => {
-    saveJobApplication(int);
-    toast.success("You have applied successfully!");
-  } 
+    const dataCheck = getStoreJobApplication();
+    const isJobAlreadyApplied = dataCheck.some((job) => job === int);
+    if (!isJobAlreadyApplied) {
+      saveJobApplication(int);
+      toast.success("You Have Applied Successfully!");
+    } else {
+      toast.error("Job Already Applied!");
+    }
+  };
   return (
     <div className="container m-auto">
       <div className="hero bg-base-200">
-          <div className="hero-content text-center">
-            <div className="max-w-md">
-              <h1 className="text-5xl font-bold py-20">Details</h1>
-            </div>
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold py-20">Details</h1>
           </div>
         </div>
+      </div>
       <div className="grid grid-cols-12 gap-5 py-20">
         <div className="col-span-8">
           <span className="font-bold">Job Details : </span>
@@ -47,24 +64,31 @@ const Details = () => {
               <h2 className="card-title">Job Details</h2>
               <hr />
               <div className="flex gap-3">
-                <span className="font-bold">Salary : </span><span>{salary}</span>
+                <span className="font-bold">Salary : </span>
+                <span>{salary}</span>
               </div>
               <div className="flex gap-3">
-                <span className="font-bold">Job Title : </span><span>{job_title}</span>
+                <span className="font-bold">Job Title : </span>
+                <span>{job_title}</span>
               </div>
               <h2 className="card-title">Contact Information</h2>
               <hr />
               <div className="flex gap-3">
-                <span className="font-bold">Phone : </span><span>{contact_information.phone}</span>
+                <span className="font-bold">Phone : </span>
+                <span>{contact_information.phone}</span>
               </div>
               <div className="flex gap-3">
-                <span className="font-bold">Email : </span><span>{contact_information.email}</span>
+                <span className="font-bold">Email : </span>
+                <span>{contact_information.email}</span>
               </div>
               <div className="flex gap-3">
-                <span className="font-bold">Address : </span><span>{contact_information.address}</span>
+                <span className="font-bold">Address : </span>
+                <span>{contact_information.address}</span>
               </div>
             </div>
-            <button onClick={handleApplyJob} className="btn btn-neutral">Apply Now</button>
+            <button onClick={handleApplyJob} className="btn btn-neutral">
+              Apply Now
+            </button>
             <ToastContainer />
           </div>
         </div>
